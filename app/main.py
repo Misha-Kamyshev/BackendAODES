@@ -22,8 +22,10 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 
-# from .routers import authorization, user, catalog, order, backet, favorite
+from app.databases.postgres_asyncpg import asyncpg_db
+from .static import DATA_SOURCE
 
 app = FastAPI()
 app.add_middleware(
@@ -33,10 +35,16 @@ app.add_middleware(
     allow_methods=["POST", 'GET'],
     allow_headers=["Content-Type", "Authorization", "*"]
 )
-#
-# app.include_router(authorization.router)
-# app.include_router(user.router)
-# app.include_router(catalog.router)
-# app.include_router(order.router)
-# app.include_router(backet.router)
-# app.include_router(favorite.router)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await asyncpg_db.connect(DATA_SOURCE)
+
+    yield
+
+    await asyncpg_db.disconnect()
+
+
+app = FastAPI(lifespan=lifespan)
+
