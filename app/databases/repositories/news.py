@@ -35,3 +35,17 @@ async def get_news_block(news_id: int):
         result.append(NewsBlockSchema(**row_dict))
 
     return result
+
+
+async def get_promotion_news(count: int):
+    query = """
+            SELECT *
+            FROM news
+            WHERE promotion = TRUE
+            ORDER BY published_at
+            LIMIT $1
+            """
+
+    rows = await asyncpg_db.fetch(query, count)
+
+    return [dict(row) for row in rows]
