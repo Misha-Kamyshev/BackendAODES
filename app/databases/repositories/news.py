@@ -8,10 +8,23 @@ async def get_news():
     query = """
             SELECT *
             FROM news
-            ORDER BY id;
+            ORDER BY id DESC;
             """
 
     rows = await asyncpg_db.fetch(query)
+
+    return [dict(row) for row in rows]
+
+
+async def get_news_count(count: int):
+    query = """
+            SELECT *
+            FROM news
+            ORDER BY id DESC
+            LIMIT $1;
+            """
+
+    rows = await asyncpg_db.fetch(query, count)
 
     return [dict(row) for row in rows]
 
