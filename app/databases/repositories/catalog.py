@@ -13,6 +13,7 @@ async def get_catalog():
                    p.image AS product_image,
                    p.price,
                    p.old_price,
+                   p.discount_date,
                    p.stock,
                    p.special_price
 
@@ -45,6 +46,7 @@ async def get_catalog():
                     "image": row["product_image"],
                     "price": row["price"],
                     "old_price": row["old_price"],
+                    "discount_date": row["discount_date"],
                     "stock": row["stock"],
                     "special_price": row["special_price"],
                 }
