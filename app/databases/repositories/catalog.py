@@ -51,3 +51,26 @@ async def get_catalog():
             )
 
     return list(categories.values())
+
+
+async def get_promotion_catalog(count: int):
+    query = """
+            SELECT id,
+                   name,
+                   image,
+                   price,
+                   old_price,
+                   discount_date,
+                   stock,
+                   special_price
+            FROM products
+            WHERE (stock = TRUE OR special_price = TRUE)
+              AND old_price IS NOT NULL
+              AND discount_date >= CURRENT_DATE
+                ORDER BY discount_date, id
+                LIMIT $1;
+            """
+
+    rows = await asyncpg_db.fetch(query, count)
+
+    return [dict(row) for row in rows]
