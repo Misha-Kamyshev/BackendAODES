@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional
 from pydantic import BaseModel
 
@@ -8,13 +9,13 @@ class ProductSchema(BaseModel):
     image: Optional[str]
     price: Optional[int]
     old_price: Optional[int]
+    discount_date: Optional[date]
     stock: bool
     special_price: bool
 
 
 class CategorySchema(BaseModel):
     id: int
-    slug: str
     name: str
     icon: Optional[str]
     products: List[ProductSchema]
