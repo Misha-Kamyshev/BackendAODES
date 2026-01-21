@@ -25,7 +25,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from app.databases.postgres_asyncpg import asyncpg_db
-from .routers import catalog
+from .routers import catalog, news
 from .static import DATA_SOURCE
 
 app = FastAPI()
@@ -50,3 +50,4 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(catalog.router)
+app.include_router(news.router)
