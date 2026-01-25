@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from ..schemas.news import NewsSchema, NewsBlockSchema
 from ..databases.repositories.news import get_news, get_news_block, get_promotion_news, get_news_count
 
-router = APIRouter(prefix="/news", tags=["Catalog"])
+router = APIRouter(prefix="/news", tags=["News"])
 
 
 @router.get("/", response_model=list[NewsSchema])

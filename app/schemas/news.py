@@ -21,7 +21,7 @@ class NewsSchema(BaseModel):
     id: int
     title: str
     preview_text: str
-    preview_image: Optional[str]
+    preview_image: str
     published_at: date
 
 class NewsBlockSchema(BaseModel):
