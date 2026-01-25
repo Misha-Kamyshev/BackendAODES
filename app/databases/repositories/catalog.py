@@ -69,19 +69,21 @@ async def get_categories():
 
 async def get_promotion_catalog(count: int):
     query = """
-            SELECT id,
-                   name,
-                   image,
-                   price,
-                   old_price,
-                   discount_date,
-                   stock,
-                   special_price
-            FROM products
+            SELECT p.id,
+                   p.name,
+                   p.image,
+                   p.price,
+                   p.old_price,
+                   p.discount_date,
+                   p.stock,
+                   p.special_price,
+                   c.name as category_name
+            FROM products p
+                     LEFT JOIN catalog_categories c ON p.category_id = c.id
             WHERE (stock = TRUE OR special_price = TRUE)
               AND old_price IS NOT NULL
               AND discount_date >= CURRENT_DATE
-                ORDER BY discount_date, id
+            ORDER BY discount_date, id
                 LIMIT $1;
             """
 
