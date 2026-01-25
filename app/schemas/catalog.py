@@ -17,5 +17,6 @@ class ProductSchema(BaseModel):
 class CategorySchema(BaseModel):
     id: int
     name: str
-    icon: Optional[str]
-    products: List[ProductSchema]
+    description: str
+    icon: str
+    products: Optional[List[ProductSchema]] = None

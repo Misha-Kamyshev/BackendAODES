@@ -55,6 +55,17 @@ async def get_catalog():
     return list(categories.values())
 
 
+async def get_categories():
+    query = """
+            SELECT *
+            FROM catalog_categories;
+            """
+
+    rows = await asyncpg_db.fetch(query)
+
+    return [dict(rows) for rows in rows]
+
+
 async def get_promotion_catalog(count: int):
     query = """
             SELECT id,
