@@ -22,6 +22,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from app.databases.postgres_asyncpg import asyncpg_db
@@ -37,7 +38,6 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization", "*"]
 )
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await asyncpg_db.connect(DATA_SOURCE)
@@ -48,6 +48,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.mount(
+    "/static",
+    StaticFiles(directory="static"),
+    name="static"
+)
 
 app.include_router(catalog.router)
 app.include_router(news.router)
