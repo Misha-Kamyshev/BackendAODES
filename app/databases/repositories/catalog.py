@@ -8,9 +8,9 @@ async def get_catalog():
                    c.description AS category_description,
                    c.icon        AS category_icon,
 
-                   p.id    AS product_id,
-                   p.name  AS product_name,
-                   p.image AS product_image,
+                   p.id          AS product_id,
+                   p.name        AS product_name,
+                   p.image       AS product_image,
                    p.price,
                    p.old_price,
                    p.discount_date,
@@ -49,7 +49,7 @@ async def get_catalog():
                     "discount_date": row["discount_date"],
                     "stock": row["stock"],
                     "special_price": row["special_price"],
-                    "category_name": None
+                    "category_name": row["category_name"],
                 }
             )
 
