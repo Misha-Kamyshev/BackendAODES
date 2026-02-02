@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from ..databases.repositories.catalog import get_catalog, get_promotion_catalog, get_categories
+from ..databases.repositories.catalog import get_catalog, get_promotion_catalog, get_categories, get_regular_products
 from ..schemas.catalog import CategorySchema, ProductSchema
 
 router = APIRouter(prefix="/catalog", tags=["Catalog"])
@@ -18,4 +18,13 @@ async def catalog_categories():
 
 @router.get("/promotion/{count}", response_model=list[ProductSchema])
 async def promotion(count: int):
-    return await get_promotion_catalog(count)
+    promo = await get_promotion_catalog(count)
+    if len(promo) == count:
+        return promo
+
+    missing = count - len(promo)
+    promo_ids = [promo["id"] for promo in promo]
+
+    regular = await get_regular_products(missing, promo_ids)
+
+    return promo + regular

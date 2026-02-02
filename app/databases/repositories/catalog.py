@@ -90,3 +90,27 @@ async def get_promotion_catalog(count: int):
     rows = await asyncpg_db.fetch(query, count)
 
     return [dict(row) for row in rows]
+
+
+async def get_regular_products(limit: int, exclude_ids: list[int]):
+    query = """
+            SELECT p.id,
+                   p.name,
+                   p.image,
+                   p.price,
+                   p.old_price,
+                   p.discount_date,
+                   p.stock,
+                   p.special_price,
+                   c.name AS category_name
+            FROM products p
+                     LEFT JOIN catalog_categories c ON p.category_id = c.id
+            WHERE p.price IS NOT NULL
+              AND p.id != ALL($1:: int [])
+            ORDER BY id
+                LIMIT $2;
+            """
+
+    rows = await asyncpg_db.fetch(query, exclude_ids, limit)
+
+    return [dict(row) for row in rows]
