@@ -1,7 +1,8 @@
 from datetime import date
 from enum import Enum
-from typing import Optional, Any
+from typing import Union, List
 from pydantic import BaseModel
+
 
 class BlockType(str, Enum):
     title = "title"
@@ -17,6 +18,7 @@ class BlockType(str, Enum):
     carousel = "carousel"
     tabel = "tabel"
 
+
 class NewsSchema(BaseModel):
     id: int
     title: str
@@ -24,7 +26,39 @@ class NewsSchema(BaseModel):
     preview_image: str
     published_at: date
 
+
+class BaseBlockData(BaseModel):
+    pass
+
+
+class TitleBlockData(BaseBlockData):
+    text: str
+    level: int
+
+
+class ParagraphBlockData(BaseBlockData):
+    text: str
+
+
+class ImageBlockData(BaseBlockData):
+    url: str
+
+
+class ListBlockData(BaseBlockData):
+    items: List[str]
+
+
+class CarouselBlockData(BaseBlockData):
+    images: List[str]
+
+
 class NewsBlockSchema(BaseModel):
     position: int
     type: BlockType
-    data: dict[str, Any]
+    data: Union[
+        TitleBlockData,
+        ParagraphBlockData,
+        ImageBlockData,
+        ListBlockData,
+        CarouselBlockData,
+    ]
