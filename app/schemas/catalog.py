@@ -1,5 +1,5 @@
 from datetime import date
-from typing import List, Optional
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -20,4 +20,4 @@ class CategorySchema(BaseModel):
     name: str
     description: str
     icon: str
-    products: Optional[List[ProductSchema]] = None
+    products: Optional[list[ProductSchema]] = None
