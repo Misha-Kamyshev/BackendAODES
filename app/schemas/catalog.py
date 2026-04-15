@@ -4,15 +4,15 @@ from pydantic import BaseModel
 
 
 class ProductSchema(BaseModel):
-    id: int
-    name: str
-    image: str
-    price: Optional[int]
-    old_price: Optional[int]
-    discount_date: Optional[date]
-    stock: bool
-    special_price: bool
-    category_name: Optional[str]
+    product_id: int
+    product_name: str
+    product_image: str
+    product_price: Optional[int]
+    old_product_price: Optional[int]
+    product_discount_date: Optional[date]
+    product_stock: bool
+    product_special_price: bool
+    category_name: str
 
 
 class CategorySchema(BaseModel):
@@ -20,4 +20,3 @@ class CategorySchema(BaseModel):
     name: str
     description: str
     icon: str
-    products: Optional[list[ProductSchema]] = None

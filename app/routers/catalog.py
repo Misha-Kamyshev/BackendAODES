@@ -6,9 +6,9 @@ from ..schemas.catalog import CategorySchema, ProductSchema
 router = APIRouter(prefix="/catalog", tags=["Catalog"])
 
 
-@router.get("/", response_model=list[CategorySchema])
-async def catalog():
-    return await get_catalog()
+@router.get("/", response_model=list[ProductSchema])
+async def catalog(category_id: int = ...):
+    return await get_catalog(category_id)
 
 
 @router.get("/categories", response_model=list[CategorySchema])
