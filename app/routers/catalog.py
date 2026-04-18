@@ -23,7 +23,7 @@ async def promotion(count: int):
         return promo
 
     missing = count - len(promo)
-    promo_ids = [promo["id"] for promo in promo]
+    promo_ids = [promo["product_id"] for promo in promo]
 
     regular = await get_regular_products(missing, promo_ids)
 

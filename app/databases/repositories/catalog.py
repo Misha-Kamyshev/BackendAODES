@@ -36,21 +36,21 @@ async def get_categories():
 
 async def get_promotion_catalog(count: int):
     query = """
-            SELECT p.id,
-                   p.name,
-                   p.image,
-                   p.price,
-                   p.old_price,
-                   p.discount_date,
-                   p.stock,
-                   p.special_price,
-                   c.name as category_name
+            SELECT p.id            AS product_id,
+                   p.name          AS product_name,
+                   p.image         AS product_image,
+                   p.price         AS product_price,
+                   p.old_price     AS old_product_price,
+                   p.discount_date AS product_discount_date,
+                   p.stock         AS product_stock,
+                   p.special_price AS product_special_price,
+                   c.name          AS category_name
             FROM products p
                      LEFT JOIN catalog_categories c ON p.category_id = c.id
             WHERE (stock = TRUE OR special_price = TRUE)
               AND old_price IS NOT NULL
               AND discount_date >= CURRENT_DATE
-            ORDER BY discount_date, id
+            ORDER BY p.discount_date, p.id
                 LIMIT $1;
             """
 
@@ -61,20 +61,20 @@ async def get_promotion_catalog(count: int):
 
 async def get_regular_products(limit: int, exclude_ids: list[int]):
     query = """
-            SELECT p.id,
-                   p.name,
-                   p.image,
-                   p.price,
-                   p.old_price,
-                   p.discount_date,
-                   p.stock,
-                   p.special_price,
-                   c.name AS category_name
+            SELECT p.id            AS product_id,
+                   p.name          AS product_name,
+                   p.image         AS product_image,
+                   p.price         AS product_price,
+                   p.old_price     AS old_product_price,
+                   p.discount_date AS product_discount_date,
+                   p.stock         AS product_stock,
+                   p.special_price AS product_special_price,
+                   c.name          AS category_name
             FROM products p
                      LEFT JOIN catalog_categories c ON p.category_id = c.id
             WHERE p.price IS NOT NULL
               AND p.id != ALL($1:: int [])
-            ORDER BY id
+            ORDER BY p.id
                 LIMIT $2;
             """
 
