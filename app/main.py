@@ -26,7 +26,7 @@ from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from app.databases.postgres_asyncpg import asyncpg_db
-from .routers import catalog, news, videos, dealers
+from .routers import catalog, news, videos, dealers, parts
 from .static import DATA_SOURCE
 
 app = FastAPI()
@@ -59,3 +59,4 @@ app.include_router(catalog.router)
 app.include_router(news.router)
 app.include_router(videos.router)
 app.include_router(dealers.router)
+app.include_router(parts.router)
