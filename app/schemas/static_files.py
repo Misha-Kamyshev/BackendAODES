@@ -23,3 +23,4 @@ class Block(BaseModel):
 
 class PolicyResponse(BaseModel):
     blocks: list[Block]
+    redaction: str
