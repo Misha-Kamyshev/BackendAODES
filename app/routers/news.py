@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from ..schemas.news import NewsSchema, NewsBlockSchema
+from ..schemas.news import NewsSchema, NewsDetailSchema
 from ..databases.repositories.news import get_news, get_news_block, get_promotion_news, get_news_count
 
 router = APIRouter(prefix="/news", tags=["News"])
@@ -14,11 +14,11 @@ async def news():
 async def news_latest(count: int):
     return await get_news_count(count)
 
-@router.get("/block/{news_id}", response_model=list[NewsBlockSchema])
+@router.get("/block/{news_id}", response_model=list[NewsDetailSchema])
 async def news_block(news_id: int):
     return await get_news_block(news_id)
 
 
-@router.get("/promotion/{count}", response_model=list[NewsSchema])
-async def news_promotion(count: int):
-    return await get_promotion_news(count)
+@router.get("/promotion/", response_model=list[NewsSchema])
+async def news_promotion():
+    return await get_promotion_news()

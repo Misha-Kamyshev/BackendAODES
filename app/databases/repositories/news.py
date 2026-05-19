@@ -1,14 +1,17 @@
 import json
 
 from ..postgres_asyncpg import asyncpg_db
-from ...schemas.news import NewsBlockSchema
+from ...schemas.news import NewsDetailSchema
 
 
 async def get_news():
     query = """
-            SELECT *
+            SELECT id,
+                   title,
+                   preview_text,
+                   preview_image
             FROM news
-            ORDER BY id DESC;
+            ORDER BY published_at DESC;
             """
 
     rows = await asyncpg_db.fetch(query)
@@ -18,9 +21,12 @@ async def get_news():
 
 async def get_news_count(count: int):
     query = """
-            SELECT *
+            SELECT id,
+                   title,
+                   preview_text,
+                   preview_image
             FROM news
-            ORDER BY id DESC
+            ORDER BY published_at DESC
             LIMIT $1;
             """
 
@@ -32,32 +38,36 @@ async def get_news_count(count: int):
 async def get_news_block(news_id: int):
     query = """
             SELECT *
-            FROM news_block
-            WHERE news_id = $1
-            ORDER BY position
+            FROM news
+            WHERE id = $1;
             """
 
     rows = await asyncpg_db.fetch(query, news_id)
 
-    result = []
+    blocks_news = []
     for row in rows:
-        row_dict = dict(row)
-        if isinstance(row_dict["data"], str):
-            row_dict["data"] = json.loads(row_dict["data"])
-        result.append(NewsBlockSchema(**row_dict))
+        blocks_news.append(dict(row))
 
-    return result
+    for block in blocks_news:
+        value = block.get("data_detail_text")
+
+        if isinstance(value, str):
+            block["data_detail_text"] = json.loads(value)
+
+    return blocks_news
 
 
-async def get_promotion_news(count: int):
+async def get_promotion_news():
     query = """
-            SELECT *
+            SELECT id,
+                   title,
+                   preview_text,
+                   preview_image
             FROM news
             WHERE promotion = TRUE
-            ORDER BY published_at
-            LIMIT $1
+            ORDER BY published_at DESC;
             """
 
-    rows = await asyncpg_db.fetch(query, count)
+    rows = await asyncpg_db.fetch(query)
 
     return [dict(row) for row in rows]
