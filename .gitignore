@@ -4,3 +4,4 @@ __pycache__
 .env
 static-backup
 docker-compose.yml
+.codex
