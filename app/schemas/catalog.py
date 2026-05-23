@@ -12,7 +12,7 @@ class ProductSchema(BaseModel):
     product_stock: bool
     product_special_price: bool
     category_name: str
-    link_preview_image: list[str]
+    link_preview_images: list[str]
     colors: list[str]
 
 

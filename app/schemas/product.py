@@ -25,5 +25,8 @@ class ProductDetailSchema(BaseModel):
     clearance: Optional[str]
     wheel_base: Optional[str]
     width: Optional[str]
+    video_link: str
+    link_documentation: Optional[list]
     colors: list[str]
     link_preview_images: list[str]
+    video_preview_image: str
