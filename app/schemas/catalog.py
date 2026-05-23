@@ -11,6 +11,7 @@ class ProductSchema(BaseModel):
     product_discount_date: Optional[date]
     product_stock: bool
     product_special_price: bool
+    product_link_preview_image: Optional[str]
     category_name: str
     link_preview_images: list[str]
     colors: list[str]

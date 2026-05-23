@@ -1,14 +1,15 @@
 from ..postgres_asyncpg import asyncpg_db
 
 PRODUCT_BASE_SELECT = """
-    p.id              AS product_id,
-    p.name            AS product_name,
-    p.price           AS product_price,
-    p.old_price       AS old_product_price,
-    p.discount_date   AS product_discount_date,
-    p.stock           AS product_stock,
-    p.special_price   AS product_special_price,
-    c.name            AS category_name,
+    p.id                 AS product_id,
+    p.name               AS product_name,
+    p.price              AS product_price,
+    p.old_price          AS old_product_price,
+    p.discount_date      AS product_discount_date,
+    p.stock              AS product_stock,
+    p.special_price      AS product_special_price,
+    p.link_preview_image AS product_link_preview_image,
+    c.name               AS category_name,
 
     COALESCE(pc.link_preview_images, '{}') AS link_preview_images,
     COALESCE(pc.colors, '{}') AS colors
@@ -34,7 +35,7 @@ PRODUCT_COLOR_CTE = """
                                                      LEFT JOIN colors col
                                                                ON col.id = cp.id_color
 
-                                            GROUP BY cp.id_product) \
+                                            GROUP BY cp.id_product)
                     """
 
 
