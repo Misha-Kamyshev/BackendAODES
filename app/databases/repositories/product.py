@@ -11,6 +11,7 @@ async def get_detail_product_db(id_product: int):
                    p.discount_date,
                    p.stock,
                    p.special_price,
+                   p.link_preview_image,
                    pc.*,
                    COALESCE(product_colors.colors, '{}')              AS colors,
                    COALESCE(product_colors.link_preview_images, '{}') AS link_preview_images
@@ -39,7 +40,7 @@ async def get_detail_product_db(id_product: int):
 
     product = dict(row)
 
-    for field in ("description", "characteristics", "photos", "link_documentation"):
+    for field in ("description", "characteristics", "photos", "link_documentation", "preview_other_photo"):
         value = product.get(field)
 
         if isinstance(value, str):
@@ -119,18 +120,18 @@ async def get_other_product_db(id_product: int):
             WITH product_colors AS (SELECT cp.id_product,
 
                                            array_agg(
-                                                   cp.link_preview_image ORDER BY cp.id_color
-                                           )
-                                               FILTER (
-                        WHERE cp.link_preview_image IS NOT NULL
-                    ) AS link_preview_images,
+                                           cp.link_preview_image ORDER BY cp.id_color
+                                                    )
+                                           FILTER (
+                                               WHERE cp.link_preview_image IS NOT NULL
+                                               ) AS link_preview_images,
 
                                            array_agg(
-                                                   col.hex ORDER BY cp.id_color
-                                           )
-                                               FILTER (
-                        WHERE col.hex IS NOT NULL
-                    ) AS colors
+                                           col.hex ORDER BY cp.id_color
+                                                    )
+                                           FILTER (
+                                               WHERE col.hex IS NOT NULL
+                                               ) AS colors
 
                                     FROM colors_production cp
 
@@ -139,14 +140,15 @@ async def get_other_product_db(id_product: int):
 
                                     GROUP BY cp.id_product)
 
-            SELECT p.id            AS product_id,
-                   p.name          AS product_name,
-                   p.price         AS product_price,
-                   p.old_price     AS old_product_price,
-                   p.discount_date AS product_discount_date,
-                   p.stock         AS product_stock,
-                   p.special_price AS product_special_price,
-                   c.name          AS category_name,
+            SELECT p.id                      AS product_id,
+                   p.name                    AS product_name,
+                   p.price                   AS product_price,
+                   p.old_price               AS old_product_price,
+                   p.discount_date           AS product_discount_date,
+                   p.stock                   AS product_stock,
+                   p.special_price           AS product_special_price,
+                   p.link_preview_image      AS product_link_preview_image,
+                   c.name                    AS category_name,
 
                    COALESCE(
                            pc.link_preview_images,
@@ -154,7 +156,7 @@ async def get_other_product_db(id_product: int):
                                WHEN p.link_preview_image IS NOT NULL THEN ARRAY [p.link_preview_image]
                                ELSE '{}'
                                END
-                   )               AS link_preview_images,
+                   )                         AS link_preview_images,
 
                    COALESCE(pc.colors, '{}') AS colors
 

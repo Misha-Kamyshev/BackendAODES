@@ -17,6 +17,7 @@ class ProductDetailSchema(BaseModel):
     warranty: str
     warranty_text: str
     description: dict
+    link_documentation: Optional[list]
     characteristics: Optional[dict]
     path_photo_dimensions: Optional[str]
     photos: list[str]
@@ -25,8 +26,9 @@ class ProductDetailSchema(BaseModel):
     clearance: Optional[str]
     wheel_base: Optional[str]
     width: Optional[str]
-    video_link: str
-    link_documentation: Optional[list]
+    video_link: Optional[str]
+    video_preview_image: Optional[str]
     colors: list[str]
     link_preview_images: list[str]
-    video_preview_image: str
+    link_preview_image: Optional[str]
+    preview_other_photo: Optional[list[str]]
