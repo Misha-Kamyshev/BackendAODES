@@ -14,8 +14,8 @@ async def news():
 async def news_latest(count: int):
     return await get_news_count(count)
 
-@router.get("/block/{news_id}", response_model=list[NewsDetailSchema])
-async def news_block(news_id: int):
+@router.get("/block/", response_model=NewsDetailSchema)
+async def news_block(news_id: int = ...):
     return await get_news_block(news_id)
 
 

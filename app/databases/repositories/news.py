@@ -1,7 +1,6 @@
 import json
 
 from ..postgres_asyncpg import asyncpg_db
-from ...schemas.news import NewsDetailSchema
 
 
 async def get_news():
@@ -37,24 +36,26 @@ async def get_news_count(count: int):
 
 async def get_news_block(news_id: int):
     query = """
-            SELECT *
+            SELECT title,
+                   preview_image,
+                   published_at,
+                   data_detail_text
             FROM news
             WHERE id = $1;
             """
 
-    rows = await asyncpg_db.fetch(query, news_id)
+    row = await asyncpg_db.fetch_row(query, news_id)
 
-    blocks_news = []
-    for row in rows:
-        blocks_news.append(dict(row))
+    if row is None:
+        return None
 
-    for block in blocks_news:
-        value = block.get("data_detail_text")
+    block = dict(row)
+    value = block.get("data_detail_text")
 
-        if isinstance(value, str):
-            block["data_detail_text"] = json.loads(value)
+    if isinstance(value, str):
+        block["data_detail_text"] = json.loads(value)
 
-    return blocks_news
+    return block
 
 
 async def get_promotion_news():
