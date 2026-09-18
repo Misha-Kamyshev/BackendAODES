@@ -20,23 +20,16 @@
     - .databases.ban.add_ip: Функция добавления IP в черный список
 """
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from contextlib import asynccontextmanager
 
 from app.databases.postgres_asyncpg import asyncpg_db
 from .routers import catalog, news, videos, dealers, parts, static_files, product
 from .static import DATA_SOURCE
 
-app = FastAPI()
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["https://localhost:5173", "https://127.0.0.1:5173"],
-    allow_credentials=True,
-    allow_methods=["POST", 'GET'],
-    allow_headers=["Content-Type", "Authorization", "*"]
-)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -48,6 +41,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://localhost:5173", "https://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["POST", "GET"],
+    allow_headers=["Content-Type", "Authorization", "*"]
+)
 
 app.mount(
     "/static",
